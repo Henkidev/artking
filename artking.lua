@@ -54,6 +54,7 @@ end
 drawer = math.random(#players)
 function eventNewGame()
     system.bindMouse(players[drawer],false)
+    players = {}
     for _,remove in next,{0,1,2,3,4} do
         ui.removeTextArea(remove,nil)
     end
@@ -123,7 +124,7 @@ function eventTextAreaCallback(id,name,callback)
         if size1 == -4 then
             size1 = 11
         end
-        if size2 = -2 then
+        if size2 == -2 then
             size2 = 13
         end
         print(size1 .. size2)
