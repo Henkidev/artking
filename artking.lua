@@ -17,7 +17,7 @@ function module()
     tfm.exec.setUIMapName("<ch> يتم إختيار رسام ... </ch>")
 end
 
-drow = math.random(#players)
+drawer = math.random(#players)
 chose = 0
 function eventLoop(past,left)
     chose = chose + 1
@@ -25,8 +25,8 @@ function eventLoop(past,left)
         tfm.exec.newGame("@7783037")
     end
     if chose == 20 then
-        if not banned[players[drow]] then
-            tfm.exec.setUIMapName("<ch>الرسام :</ch>".. " " .. players[drow])
+        if not banned[players[drawer]] then
+            tfm.exec.setUIMapName("<ch>الرسام :</ch>".. " " .. players[drawer])
         else
             tfm.exec.setUIMapName("<ch>الرسام : الرسام محظور</ch>")
             tfm.exec.setGameTime(0,true)
@@ -35,25 +35,25 @@ function eventLoop(past,left)
     end
 end
 
-drow = math.random(#players)
+drawer = math.random(#players)
 sub = math.random(#subjects)
 function drower()
-    if not banned[players[drow]] then
-        tfm.exec.killPlayer(players[drow])
+    if not banned[players[drawer]] then
+        tfm.exec.killPlayer(players[drawer])
         tfm.exec.chatMessage("<vp> حان وقت تخمين الرسمة التي سيرسمها الرسام !!!")
-        ui.addTextArea(0, "<p align='center'><font size='23'> الرسمة التي يجب عليك رسمها هي " .. " " .. subjects[sub] , players[drow], 7, 34, 788, 56, 0x0d171c, 0x000000, 1, true)
-        ui.addTextArea(2, "<a href='event:clear'><p align='center'>C", players[drow], 11, 316, 21, 20, 0x0d1214, 0xc9db00, 1, true)
-        ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", players[drow], 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
-        ui.addTextArea(3, "<a href='event:-'><p align='center'><b>-", players[drow], 11, 287, 21, 20, 0x0d1214, 0xc9db00, 1, true)
-        ui.addTextArea(4, "<a href='event:+'><p align='center'><b>+", players[drow], 11, 260, 21, 20, 0x0d1214, 0xc9db00, 1, true)
-        system.bindMouse(players[drow],true)
+        ui.addTextArea(0, "<p align='center'><font size='23'> الرسمة التي يجب عليك رسمها هي " .. " " .. subjects[sub] , players[drawer], 7, 34, 788, 56, 0x0d171c, 0x000000, 1, true)
+        ui.addTextArea(2, "<a href='event:clear'><p align='center'>C", players[drawer], 11, 316, 21, 20, 0x0d1214, 0xc9db00, 1, true)
+        ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", players[drawer], 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
+        ui.addTextArea(3, "<a href='event:-'><p align='center'><b>-", players[drawer], 11, 287, 21, 20, 0x0d1214, 0xc9db00, 1, true)
+        ui.addTextArea(4, "<a href='event:+'><p align='center'><b>+", players[drawer], 11, 260, 21, 20, 0x0d1214, 0xc9db00, 1, true)
+        system.bindMouse(players[drawer],true)
         canAns = true
     end
 end
 
-drow = math.random(#players)
+drawer = math.random(#players)
 function eventNewGame()
-    system.bindMouse(players[drow],false)
+    system.bindMouse(players[drawer],false)
     for _,remove in next,{0,1,2,3,4} do
         ui.removeTextArea(remove,nil)
     end
@@ -120,6 +120,13 @@ function eventTextAreaCallback(id,name,callback)
     elseif callback == "-" then
         size1 = size1 - 3
         size2 = size2 - 3
+        if size1 == -4 then
+            size1 = 11
+        end
+        if size2 = -2 then
+            size2 = 13
+        end
+        print(size1 .. size2)
     elseif callback == "clear" then
         for id = 5,9999 do
             ui.removeTextArea(id,nil)
@@ -141,7 +148,7 @@ end
 
 function eventColorPicked(id, name, color)
     uicolor = color
-    ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", players[drow], 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
+    ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", players[drawer], 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
 end
 
 function eventNewPlayer(name)
