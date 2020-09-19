@@ -15,6 +15,7 @@ function module()
     players = {}
     for name , player in next, tfm.get.room.playerList do
         table.insert(players,name)
+        drow[name] = false
     end
     tfm.exec.setUIMapName("<ch> يتم إختيار رسام ... </ch>")
 end
@@ -176,6 +177,7 @@ function eventPlayerLeft(name)
     if drow[name] then
         tfm.exec.chatMessage("<r> لقد غادر الرسام الغرفة جاري الإنتقال الى الجولة التالية ...")
         tfm.exec.setGameTime(0,true)
+        drow[name] = false
     end
 end
 table.foreach(tfm.get.room.playerList, eventNewPlayer)
