@@ -1,4 +1,4 @@
--- Leader of draw script by Aron#6810
+-- artking script by Aron#6810
 for _,modulo in next,{"disableAfkDeath","disableAutoNewGame","disableAutoScore","disableAutoShaman","disableAutoTimeLeft","disablePhysicalConsumables"} do
     tfm.exec[modulo](true)
 end
@@ -17,7 +17,7 @@ function module()
     tfm.exec.setUIMapName("<ch> يتم إختيار رسام ... </ch>")
 end
 
-drawer = math.random(#players)
+
 chose = 0
 function eventLoop(past,left)
     chose = chose + 1
@@ -25,22 +25,17 @@ function eventLoop(past,left)
         tfm.exec.newGame("@7783037")
     end
     if chose == 20 then
-        if not banned[players[drawer]] then
-            tfm.exec.setUIMapName("<ch>الرسام :</ch>".. " " .. players[drawer])
-        else
-            tfm.exec.setUIMapName("<ch>الرسام : الرسام محظور</ch>")
-            tfm.exec.setGameTime(0,true)
-        end
         drower()
     end
 end
 
-drawer = math.random(#players)
-sub = math.random(#subjects)
 function drower()
+    drawer = math.random(#players)
+    sub = math.random(#subjects)
     if not banned[players[drawer]] then
         tfm.exec.killPlayer(players[drawer])
         tfm.exec.chatMessage("<vp> حان وقت تخمين الرسمة التي سيرسمها الرسام !!!")
+        tfm.exec.setUIMapName("<ch>الرسام :</ch>".. " " .. players[drawer])
         ui.addTextArea(0, "<p align='center'><font size='23'> الرسمة التي يجب عليك رسمها هي " .. " " .. subjects[sub] , players[drawer], 7, 34, 788, 56, 0x0d171c, 0x000000, 1, true)
         ui.addTextArea(2, "<a href='event:clear'><p align='center'>C", players[drawer], 11, 316, 21, 20, 0x0d1214, 0xc9db00, 1, true)
         ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", players[drawer], 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
@@ -48,13 +43,17 @@ function drower()
         ui.addTextArea(4, "<a href='event:+'><p align='center'><b>+", players[drawer], 11, 260, 21, 20, 0x0d1214, 0xc9db00, 1, true)
         system.bindMouse(players[drawer],true)
         canAns = true
+    else
+        tfm.exec.setUIMapName("<ch>الرسام : الرسام محظور</ch>")
+        tfm.exec.setGameTime(0,true)
     end
 end
 
-drawer = math.random(#players)
+drow = math.random(#players)
 function eventNewGame()
-    system.bindMouse(players[drawer],false)
-    players = {}
+    for name , player in next, tfm.get.room.playerList do
+        system.bindMouse(name,false)
+    end
     for _,remove in next,{0,1,2,3,4} do
         ui.removeTextArea(remove,nil)
     end
@@ -90,7 +89,7 @@ size1 = 14
 size2 = 16
 function eventMouse(name,x,y)
     id = id + 1
-    ui.addTextArea(id, "", nil, x , y , size1, size2, uicolor, uicolor, 1, true)
+    ui.addTextArea(id, "", nil, x , y , size1, size2, uicolor, uicolor, 1, false)
 end
 
 function eventChatCommand(name,command)
@@ -112,6 +111,8 @@ function eventChatCommand(name,command)
     end
 end
 
+click = os.time()
+clear_time = os.time()
 function eventTextAreaCallback(id,name,callback)
     if callback ==  "color" then
         ui.showColorPicker(1,name,0,"إختر لون الرسام الخاص بك")
@@ -119,22 +120,29 @@ function eventTextAreaCallback(id,name,callback)
         size1 = size1 + 3
         size2 = size2 + 3
     elseif callback == "-" then
-        size1 = size1 - 3
-        size2 = size2 - 3
-        if size1 == -4 then
-            size1 = 11
-        end
-        if size2 == -2 then
-            size2 = 13
+        if click+2000 < os.time() then
+            size1 = size1 - 3
+            size2 = size2 - 3
+            if size1 == -4 then
+                size1 = 11
+            end
+            if size2 == -2 then
+                size2 = 13
+            end
+            click = os.time()
         end
         print(size1 .. size2)
     elseif callback == "clear" then
-        for id = 5,9999 do
-            ui.removeTextArea(id,nil)
+        if clear_time+2000 < os.time() then
+            for id = 5,9999 do
+                ui.removeTextArea(id,nil)
+            end
+            id = 5
+            clear_time = os.time()
         end
-        id = 5
     end
 end
+
 
 sub = math.random(#subjects)
 function eventPopupAnswer(id, name, answer)
@@ -144,12 +152,14 @@ function eventPopupAnswer(id, name, answer)
             tfm.exec.giveCheese(name)
             tfm.exec.playerVictory(name)
         end
+    else
+        tfm.exec.chatMessage("<r> إجابة خطأ ! نوب </r>",name)
     end
 end
 
 function eventColorPicked(id, name, color)
     uicolor = color
-    ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", players[drawer], 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
+    ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", name, 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
 end
 
 function eventNewPlayer(name)
