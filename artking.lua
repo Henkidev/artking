@@ -44,7 +44,6 @@ function drower()
         ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", players[drawer], 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
         ui.addTextArea(3, "<a href='event:-'><p align='center'><b>-", players[drawer], 11, 287, 21, 20, 0x0d1214, 0xc9db00, 1, true)
         ui.addTextArea(4, "<a href='event:+'><p align='center'><b>+", players[drawer], 11, 260, 21, 20, 0x0d1214, 0xc9db00, 1, true)
-        ui.addTextArea(5, "<a href='event:undo'><p align='center'> U", players[drawer], 774, 369, 20, 19, 0x071014, 0xfff200, 1, true)
         system.bindMouse(players[drawer],true)
         canAns = true
     else
