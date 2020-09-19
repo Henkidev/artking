@@ -1,16 +1,18 @@
--- artking script by Aron#6810
+-- Leader of draw script by Aron#6810
 for _,modulo in next,{"disableAfkDeath","disableAutoNewGame","disableAutoScore","disableAutoShaman","disableAutoTimeLeft","disablePhysicalConsumables"} do
     tfm.exec[modulo](true)
 end
 admins = {["Aron#6810"] = true}
 players = {}
 banned = {}
+drow = {}
 subjects = {"زهرة","شمس","قمر","انسان","علبة","ماء","قارورة عصير","شاحنة","سيارة","مدرسة","كلب","قطة","قرد","فار","كوكب الارض","كرسي","باب","نافذة"}
 tfm.exec.newGame("@7783037")
 canAns = false
 local drawer = 0
 local sub =  0
 function module()
+    players = {}
     for name , player in next, tfm.get.room.playerList do
         table.insert(players,name)
     end
@@ -33,6 +35,7 @@ function drower()
     drawer = math.random(#players)
     sub = math.random(#subjects)
     if not banned[players[drawer]] then
+        drow[players[drawer]] = true
         tfm.exec.killPlayer(players[drawer])
         tfm.exec.chatMessage("<vp> حان وقت تخمين الرسمة التي سيرسمها الرسام !!!")
         tfm.exec.setUIMapName("<ch>الرسام :</ch>".. " " .. players[drawer])
@@ -41,6 +44,7 @@ function drower()
         ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", players[drawer], 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
         ui.addTextArea(3, "<a href='event:-'><p align='center'><b>-", players[drawer], 11, 287, 21, 20, 0x0d1214, 0xc9db00, 1, true)
         ui.addTextArea(4, "<a href='event:+'><p align='center'><b>+", players[drawer], 11, 260, 21, 20, 0x0d1214, 0xc9db00, 1, true)
+        ui.addTextArea(5, "<a href='event:undo'><p align='center'> U", players[drawer], 774, 369, 20, 19, 0x071014, 0xfff200, 1, true)
         system.bindMouse(players[drawer],true)
         canAns = true
     else
@@ -49,7 +53,6 @@ function drower()
     end
 end
 
-drow = math.random(#players)
 function eventNewGame()
     for name , player in next, tfm.get.room.playerList do
         system.bindMouse(name,false)
@@ -84,7 +87,7 @@ function eventChatMessage(name,message)
     end
 end
 
-id = 5
+id = 6
 size1 = 14
 size2 = 16
 function eventMouse(name,x,y)
@@ -170,4 +173,10 @@ function eventNewPlayer(name)
     end
 end
 
+function eventPlayerLeft(name)
+    if drow[name] then
+        tfm.exec.chatMessage("<r> لقد غادر الرسام الغرفة جاري الإنتقال الى الجولة التالية ...")
+        tfm.exec.setGameTime(0,true)
+    end
+end
 table.foreach(tfm.get.room.playerList, eventNewPlayer)
