@@ -87,7 +87,7 @@ function eventChatMessage(name,message)
         end
         if players[name].ban == 2 then
             tfm.exec.chatMessage("<r> تحذير : لايمكنك مشاركة الأجوبة مع باقي الاشخاص (2/2) تم حظرك !",name)
-            ui.addTextArea(1000000000000000000, "",name, -404, -137, 1576, 874, 0x040505, 0x000000, 1, true)
+            ui.addTextArea(999910009, "",name, -404, -137, 1576, 874, 0x040505, 0x000000, 1, true)
             banned[name] = true
         end
     end
@@ -150,7 +150,7 @@ function eventTextAreaCallback(id,name,callback)
         print(size1 .. size2)
     elseif callback == "clear" then
         if clear_time+2000 < os.time() then
-            for id = 5,9999 do
+            for id = 5,999 do
                 ui.removeTextArea(id,nil)
             end
             id = 5
@@ -181,7 +181,7 @@ function eventColorPicked(id, name, color)
 end
 
 function eventNewPlayer(name)
-    players[name] = {ban = 0 ,canVote = 0}
+    players[name] = {ban = 0}
     tfm.exec.chatMessage("<vp> مرحبا بك في النمط ! \n سيختار النمط شخصا عشوائيا للرسم وعليك عند تخمين الرسمة \n كتابة الإيعاز التالي : !an \n وكتابة تخمينك \n تم صناعة النمط من قبل Aron#6810",name)
     if banned[name] then
         ui.addTextArea(1000000000000000000, "",name, -404, -137, 1576, 874, 0x040505, 0x000000, 1, true)
