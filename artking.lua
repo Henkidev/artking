@@ -118,6 +118,13 @@ function eventChatCommand(name,command)
             tfm.exec.chatMessage("<r> لقد تم تحذيرك لأنك خالفت احد قوانين النمط",args[2])
         end
     end
+    if not drow[name] then
+        if command == "an" then
+            ui.addPopup(1,2,"<p align='center'> اكتب هنا توقعك هنا !",name, 7, 34, 788,true)
+        end
+    else
+        tfm.exec.chatMessage("<r> انت الرسام لايمكنك الإجابة نوب !!!",name)
+    end 
 end
 
 click = os.time()
