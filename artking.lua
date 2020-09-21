@@ -1,14 +1,15 @@
--- Leader of draw script by Aron#6810
+-- artking script by Aron#6810
 for _,modulo in next,{"disableAfkDeath","disableAutoNewGame","disableAutoScore","disableAutoShaman","disableAutoTimeLeft","disablePhysicalConsumables"} do
     tfm.exec[modulo](true)
 end
-admins = {["Aron#6810"] = true}
+admins = {["Aron#6810"] = true , ["Wassim_pro#1386"] = true , ["Crawen#1820"] = true , ["Walllid#0000"] = true , ["Buu#1879"] = true}
 players = {}
 banned = {}
 drow = {}
-subjects = {"زهرة","شمس","قمر","انسان","علبة","ماء","قارورة عصير","شاحنة","سيارة","مدرسة","كلب","قطة","قرد","فار","كوكب الارض","كرسي","باب","نافذة"}
+subjects = {"زهرة","شمس","قمر","انسان","علبة","ماء","قارورة عصير","شاحنة","سيارة","مدرسة","كلب","قطة","قرد","فار","كوكب الارض","كرسي","باب","نافذة","اشارة مرور","اسفنجة","طائرة","هاتف","شجرة","تفاحة","موزة","فراولة","عملة نقدية","كاس","دمية","سرير","منزل","قبعة","قرش","برجر","حذاء","غيوم","جبنة","هلال","نمر","شاورما"}
 tfm.exec.newGame("@7783037")
 canAns = false
+candr = false
 local drawer = 0
 local sub =  0
 function module()
@@ -19,7 +20,6 @@ function module()
     end
     tfm.exec.setUIMapName("<ch> يتم إختيار رسام ... </ch>")
 end
-
 
 chose = 0
 function eventLoop(past,left)
@@ -47,6 +47,7 @@ function drower()
         ui.addTextArea(4, "<a href='event:+'><p align='center'><b>+", players[drawer], 11, 260, 21, 20, 0x0d1214, 0xc9db00, 1, true)
         system.bindMouse(players[drawer],true)
         canAns = true
+        candr = true
     else
         tfm.exec.setUIMapName("<ch>الرسام : الرسام محظور</ch>")
         tfm.exec.setGameTime(0,true)
@@ -56,6 +57,9 @@ end
 function eventNewGame()
     for name , player in next, tfm.get.room.playerList do
         system.bindMouse(name,false)
+        if admins[name] then
+            tfm.exec.setNameColor(name,0xFF0000)
+        end
     end
     for _,remove in next,{0,1,2,3,4} do
         ui.removeTextArea(remove,nil)
@@ -66,7 +70,9 @@ function eventNewGame()
     sub = math.random(#subjects)
     module()
     chose = 0
+    votes = 0
     canAns = false
+    candr = false
 end
 
 sub = math.random(#subjects)
@@ -95,6 +101,7 @@ function eventMouse(name,x,y)
     ui.addTextArea(id, "", nil, x , y , size1, size2, uicolor, uicolor, 1, false)
 end
 
+votes = 0
 function eventChatCommand(name,command)
     local args = {}
     for name in command:gmatch("%S+") do
@@ -103,13 +110,12 @@ function eventChatCommand(name,command)
     if admins[name] then
         if args[1] == "time" then
             tfm.exec.setGameTime(tonumber(args[2]),true)
-        end
-    end
-    if command == "an" then
-        if canAns == true then
-            ui.addPopup(1,2,"<p align='center'> اكتب توقعك هنا :",name, 187, 121, 425, 202,true)
-        else
-            tfm.exec.chatMessage("<r> لايمكنك الإجابة الأن </r>",name)
+        elseif args[1] == "ban" then
+            banned[args[2]] = true
+            ui.addTextArea(1000000000000000000, "",args[2], -404, -137, 1576, 874, 0x040505, 0x000000, 1, true)
+            tfm.exec.chatMessage("<r>لقد تم حظر اللاعب :" .. "  " .. args[2] .. "\n" .. " " .. "بسبب : " .. " " .. args[3])
+        elseif args[1] == "warn" then
+            tfm.exec.chatMessage("<r> لقد تم تحذيرك لأنك خالفت احد قوانين النمط",args[2])
         end
     end
 end
@@ -154,22 +160,27 @@ function eventPopupAnswer(id, name, answer)
             tfm.exec.chatMessage("<vp> لقد أجاب بشكل صحيح مبرووك ! "..name.."",nil)
             tfm.exec.giveCheese(name)
             tfm.exec.playerVictory(name)
+        else
+            tfm.exec.chatMessage("<r> إجابة خطأ ! نوب </r>",name)
         end
-    else
-        tfm.exec.chatMessage("<r> إجابة خطأ ! نوب </r>",name)
     end
 end
 
 function eventColorPicked(id, name, color)
     uicolor = color
-    ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", name, 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
+    if candr == true then
+        ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", name, 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
+    end
 end
 
 function eventNewPlayer(name)
-    players[name] = {ban = 0}
+    players[name] = {ban = 0 ,canVote = 0}
     tfm.exec.chatMessage("<vp> مرحبا بك في النمط ! \n سيختار النمط شخصا عشوائيا للرسم وعليك عند تخمين الرسمة \n كتابة الإيعاز التالي : !an \n وكتابة تخمينك \n تم صناعة النمط من قبل Aron#6810",name)
     if banned[name] then
         ui.addTextArea(1000000000000000000, "",name, -404, -137, 1576, 874, 0x040505, 0x000000, 1, true)
+    end
+    if admins[name] then
+        tfm.exec.setNameColor(name,0xFF0000)
     end
 end
 
@@ -180,4 +191,31 @@ function eventPlayerLeft(name)
         drow[name] = false
     end
 end
+
+function eventPlayerWon(name)
+    local alive = 0
+    for name, player in next, tfm.get.room.playerList do
+        if not player.isDead then
+            alive = alive + 1
+        end
+    end
+    if alive == 0 then
+        tfm.exec.setGameTime(0,true)
+        tfm.exec.chatMessage("<r> تحذير : لايوجد عدد لاعبيين كافي للإستمرار")
+    end
+end
+
+function eventPlayerDied(name)
+    local alive = 0
+    for name, player in next, tfm.get.room.playerList do
+        if not player.isDead then
+            alive = alive + 1
+        end
+    end
+    if alive == 0 then
+        tfm.exec.setGameTime(0,true)
+        tfm.exec.chatMessage("<r> تحذير : لايوجد عدد لاعبيين كافي للإستمرار")
+    end
+end
+
 table.foreach(tfm.get.room.playerList, eventNewPlayer)
