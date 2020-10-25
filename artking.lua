@@ -1,9 +1,9 @@
 -- artking script by Aron#6810
-for _,modulo in next,{"disableAfkDeath","disableAutoNewGame","disableAutoScore","disableAutoShaman","disableAutoTimeLeft,"disablePhysicalConsumables"} do
+for _,modulo in next,{"disableAfkDeath","disableAutoNewGame","disableAutoScore","disableAutoShaman","disableAutoTimeLeft","disablePhysicalConsumables"} do
     tfm.exec[modulo](true)
 end
 admins = {["Aron#6810"] = true , ["Wassim_pro#1386"] = true , ["Crawen#1820"] = true , ["Walllid#0000"] = true , ["Buu#1879"] = true}
-players = {}
+p = {}
 banned = {}
 drow = {}
 subjects = {"زهرة","شمس","قمر","انسان","علبة","ماء","قارورة عصير","شاحنة","سيارة","مدرسة","كلب","قطة","قرد","فار","كوكب الارض","كرسي","باب","نافذة","اشارة مرور","اسفنجة","طائرة","هاتف","شجرة","تفاحة","موزة","فراولة","عملة نقدية","كاس","دمية","سرير","منزل","قبعة","قرش","برجر","حذاء","غيوم","جبنة","هلال","نمر","شاورما"}
@@ -42,9 +42,7 @@ function drower()
         tfm.exec.setUIMapName("<ch>الرسام :</ch>".. " " .. players[drawer])
         ui.addTextArea(0, "<p align='center'><font size='23'> الرسمة التي يجب عليك رسمها هي " .. " " .. subjects[sub] , players[drawer], 7, 34, 788, 56, 0x0d171c, 0x000000, 1, true)
         ui.addTextArea(2, "<a href='event:clear'><p align='center'>C", players[drawer], 11, 316, 21, 20, 0x0d1214, 0xc9db00, 1, true)
-        ui.addTextArea(1, "<a href='event:color'>                                                                 
-                                                                                          
-                                          ", players[drawer], 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
+        ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", players[drawer], 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
         ui.addTextArea(3, "<a href='event:-'><p align='center'><b>-", players[drawer], 11, 287, 21, 20, 0x0d1214, 0xc9db00, 1, true)
         ui.addTextArea(4, "<a href='event:+'><p align='center'><b>+", players[drawer], 11, 260, 21, 20, 0x0d1214, 0xc9db00, 1, true)
         system.bindMouse(players[drawer],true)
@@ -81,13 +79,11 @@ sub = math.random(#subjects)
 
 function eventChatMessage(name,message)
     if message == subjects[sub] then
-        if players[name] and players[name].ban then
-            players[name].ban = players[name].ban + 1
-        end
-        if players[name].ban == 1 then
+        p[name].ban = p[name].ban + 1
+        if p[name].ban == 1 then
             tfm.exec.chatMessage("<r> تحذير : لايمكنك مشاركة الأجوبة مع باقي الاشخاص (1/2)",name)
         end
-        if players[name].ban == 2 then
+        if p[name].ban == 2 then
             tfm.exec.chatMessage("<r> تحذير : لايمكنك مشاركة الأجوبة مع باقي الاشخاص (2/2) تم حظرك !",name)
             ui.addTextArea(999910009, "",name, -404, -137, 1576, 874, 0x040505, 0x000000, 1, true)
             banned[name] = true
@@ -115,15 +111,16 @@ function eventChatCommand(name,command)
         elseif args[1] == "ban" then
             banned[args[2]] = true
             ui.addTextArea(1000000000000000000, "",args[2], -404, -137, 1576, 874, 0x040505, 0x000000, 1, true)
-            tfm.exec.chatMessage("<r>لقد تم حظر اللاعب :" .. "  " .. args[2] .. "
-" .. " " .. "بسبب : " .. " " .. args[3])
+            tfm.exec.chatMessage("<r>لقد تم حظر اللاعب :" .. "  " .. args[2] .. "\n" .. " " .. "بسبب : " .. " " .. args[3])
         elseif args[1] == "warn" then
             tfm.exec.chatMessage("<r> لقد تم تحذيرك لأنك خالفت احد قوانين النمط",args[2])
         end
     end
     if not drow[name] then
-        if command == "an" then
-            ui.addPopup(1,2,"<p align='center'> اكتب هنا توقعك هنا !",name, 7, 34, 788,true)
+        if canAns == true then
+            if command == "an" then
+                ui.addPopup(1,2,"<p align='center'> اكتب هنا توقعك هنا !",name, 7, 34, 788,true)
+            end
         end
     else
         tfm.exec.chatMessage("<r> انت الرسام لايمكنك الإجابة نوب !!!",name)
@@ -179,19 +176,15 @@ end
 function eventColorPicked(id, name, color)
     uicolor = color
     if candr == true then
-        ui.addTextArea(1, "<a href='event:color'>                                                                 
-                                                                                          
-                                          ", name, 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
+        ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", name, 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
     end
 end
 
 function eventNewPlayer(name)
-    players[name] = {ban = 0}
-    tfm.exec.chatMessage("<vp> مرحبا بك في النمط ! 
- سيختار النمط شخصا عشوائيا للرسم وعليك عند تخمين الرسمة 
- كتابة الإيعاز التالي : !an 
- وكتابة تخمينك 
- تم صناعة النمط من قبل Aron#6810",name)
+    if not p[name] then
+        p[name] = {ban = 0}
+    end
+    tfm.exec.chatMessage("<vp> مرحبا بك في النمط ! \n سيختار النمط شخصا عشوائيا للرسم وعليك عند تخمين الرسمة \n كتابة الإيعاز التالي : !an \n وكتابة تخمينك \n تم صناعة النمط من قبل Aron#6810",name)
     if banned[name] then
         ui.addTextArea(1000000000000000000, "",name, -404, -137, 1576, 874, 0x040505, 0x000000, 1, true)
     end
