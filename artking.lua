@@ -70,7 +70,6 @@ function eventNewGame()
     sub = math.random(#subjects)
     module()
     chose = 0
-    votes = 0
     canAns = false
     candr = false
 end
@@ -99,7 +98,6 @@ function eventMouse(name,x,y)
     ui.addTextArea(id, "", nil, x , y , size1, size2, uicolor, uicolor, 1, false)
 end
 
-votes = 0
 function eventChatCommand(name,command)
     local args = {}
     for name in command:gmatch("%S+") do
