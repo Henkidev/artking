@@ -20,7 +20,7 @@ function module()
     end
     tfm.exec.setUIMapName("<ch> A painter is chosen ... </ch>")
 end
-
+ 
 chose = 0
 function eventLoop(past,left)
     chose = chose + 1
@@ -31,7 +31,7 @@ function eventLoop(past,left)
         drower()
     end
 end
-
+ 
 function drower()
     drawer = math.random(#players)
     sub = math.random(#subjects)
@@ -39,7 +39,7 @@ function drower()
         drow[players[drawer]] = true
         tfm.exec.killPlayer(players[drawer])
         tfm.exec.chatMessage("<vp> Time to guess what drawing the painter will make !!!")
-        tfm.exec.setUIMapName("<ch>الرسام :</ch>".. " " .. players[drawer])
+        tfm.exec.setUIMapName("<ch>Painter :</ch>".. " " .. players[drawer])
         ui.addTextArea(0, "<p align='center'><font size='23'> The drawing you should draw is : " .. " " .. subjects[sub] , players[drawer], 7, 34, 788, 56, 0x0d171c, 0x000000, 1, true)
         ui.addTextArea(2, "<a href='event:clear'><p align='center'>C", players[drawer], 11, 316, 21, 20, 0x0d1214, 0xc9db00, 1, true)
         ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", players[drawer], 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
@@ -53,7 +53,7 @@ function drower()
         tfm.exec.setGameTime(0,true)
     end
 end
-
+ 
 function eventNewGame()
     for name , player in next, tfm.get.room.playerList do
         system.bindMouse(name,false)
@@ -73,9 +73,9 @@ function eventNewGame()
     canAns = false
     candr = false
 end
-
+ 
 sub = math.random(#subjects)
-
+ 
 function eventChatMessage(name,message)
     if message == subjects[sub] then
         p[name].ban = p[name].ban + 1
@@ -89,7 +89,7 @@ function eventChatMessage(name,message)
         end
     end
 end
-
+ 
 id = 6
 size1 = 14
 size2 = 16
@@ -97,7 +97,7 @@ function eventMouse(name,x,y)
     id = id + 1
     ui.addTextArea(id, "", nil, x , y , size1, size2, uicolor, uicolor, 1, false)
 end
-
+ 
 function eventChatCommand(name,command)
     local args = {}
     for name in command:gmatch("%S+") do
@@ -114,17 +114,17 @@ function eventChatCommand(name,command)
             tfm.exec.chatMessage("<r> You have been warned that you are breaking a pattern rule",args[2])
         end
     end
-    if not drow[name] then
-        if canAns == true then
-            if command == "an" then
+    if canAns == true then
+        if command == "an"  then
+            if not drow[name] then
                 ui.addPopup(1,2,"<p align='center'> Write your prediction here !",name, 7, 34, 788,true)
+            else
+                tfm.exec.chatMessage("<r> You are the painter, you cannot answer !!!",name)
             end
         end
-    else
-        tfm.exec.chatMessage("<r> You are the painter, you cannot answer !!!",name)
     end 
 end
-
+ 
 click = os.time()
 clear_time = os.time()
 function eventTextAreaCallback(id,name,callback)
@@ -156,8 +156,8 @@ function eventTextAreaCallback(id,name,callback)
         end
     end
 end
-
-
+ 
+ 
 sub = math.random(#subjects)
 function eventPopupAnswer(id, name, answer)
     if id == 1 then
@@ -170,14 +170,14 @@ function eventPopupAnswer(id, name, answer)
         end
     end
 end
-
+ 
 function eventColorPicked(id, name, color)
     uicolor = color
     if candr == true then
         ui.addTextArea(1, "<a href='event:color'>                                                                 \n                                                                                          \n                                          ", name, 9, 343, 40, 52,uicolor, 0xc9db00, 1, true)
     end
 end
-
+ 
 function eventNewPlayer(name)
     if not p[name] then
         p[name] = {ban = 0}
@@ -190,7 +190,7 @@ function eventNewPlayer(name)
         tfm.exec.setNameColor(name,0xFF0000)
     end
 end
-
+ 
 function eventPlayerLeft(name)
     if drow[name] then
         tfm.exec.chatMessage("<r> The painter has left the room Moving to the next round  ...")
@@ -198,7 +198,7 @@ function eventPlayerLeft(name)
         drow[name] = false
     end
 end
-
+ 
 function eventPlayerWon(name)
     local alive = 0
     for name, player in next, tfm.get.room.playerList do
@@ -211,7 +211,7 @@ function eventPlayerWon(name)
         tfm.exec.chatMessage("<r> Warning: There are not enough players to continue")
     end
 end
-
+ 
 function eventPlayerDied(name)
     local alive = 0
     for name, player in next, tfm.get.room.playerList do
@@ -224,5 +224,6 @@ function eventPlayerDied(name)
         tfm.exec.chatMessage("<r> Warning: There are not enough players to continue")
     end
 end
-
+ 
 table.foreach(tfm.get.room.playerList, eventNewPlayer)
+ 
